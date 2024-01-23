@@ -13,30 +13,32 @@ bibliography: references.bib
 
 # Who I am and where I came from
 
-First off, replace "Insert Name Here" in the YAML header with your name.
-It has to be surrounded by double quotation marks. 
-Briefly tell us a little background about yourself, and how
-you ended up becoming a student at CSU and taking this class.
-Put in a hypertext link to your undergraduate institution.  
+I grew up in the Washington, DC area in a Maryland suburb called Takoma Park. I always loved the outdoors and insects in particular. I remember when the Brood X cicadas emerged in 2004. Every day at recess, I would hang out with the cicadas. I thought they were the cutest, sweetest things, especially the way they wrapped their legs around my fingers. 
+
+My first exposure to coding occurred in middle school computer science class. We first learned to code in `True BASIC`. While not the most applicable programming language, I am grateful to have learned the basics of if-else statements, for loops, and do loops. In high school, we mostly coded in `Java`. 
+
+I found coding in high school to be frustrating and intimidating. In college, I decided to major in Biology to move away from math and computer science at the University of Maryland, College Park. However, I soon found myself falling in love with insect ecology, and I started learning how to use `R` for data analysis (coding + statistics - the two areas I thought I was avoiding!). I quickly realized that my background in object-based coding was a huge help, and the rigorous math curriculum from my high school days really helped me understand the probability & statistics needed to analyze data effectively. 
+
+After 22 years living in Maryland, I decided I wanted to go to graduate school somewhere with bigger mountains, and I wanted to pursue a higher degree in ecology. The [Graduate Degree Program in Ecology](ecology.colostate.edu) here at CSU seemed to be the perfect fit. I found a home in the [Hufbauer Lab](hufbauerlab.org) and have spent 4.5 years in Fort Collins as I pursue my PhD. I love the proximity to the Rockies, the ample trails along the foothills, and I spend most evenings in the summer paddling down the Cache la Poudre River. The numerous local breweries and coffee shops is a plus, too! I absolutely love it here. After graduation, I hope to stay in the area and work as a federal scientist at USGS or the USDA. 
 
 My top four leisure (or not so leisurely) activities are:
 
-1. Whitewater kayaking
+1. Whitewater kayaking - from after work runs to multi-day river trips!
 2. Enjoying good food & beer with friends
-3. Skiing
-4. Mountain biking
+3. Snow skiing, both in resorts and in the backcountry
+4. Mountain biking, particularly in the Utah desert
 
 
-![Alt text](/Users/lilydurkee/Desktop/Field-Lily.jpeg)
+![A photo of me catching butterflies on Rabbit Ears Pass in 2022.](/Users/lilydurkee/Desktop/Field-Lily.jpeg)
 
 
 # Research Interests
 
-I study evolutionary ecology in insect systems. I have done work in experimental evolution using  *Tribolium castaneum* (red flour beetle) as a model system to study the effects of immigration and admixture on adaptation to novel environments. 
+I study evolutionary ecology in insect systems. I have done work in experimental evolution using  *Tribolium castaneum* (red flour beetle) as a model system to study the effects of immigration and admixture on adaptation to novel environments. I am currently using genomic analyses to identify patterns of local adaptation to elevation in the clouded sulfur butterfly (*Colias philodice eriphyle*).
 
 ## Influential papers
 
-Two papers that I love are two review papers, one on evolutionary rescue @carlson2014evolutionary and one on genetic rescue @whiteley2015genetic. I read these papers in my first few weeks of graduate school, and I still go back to them today when I need a precise definition or good example of either process!
+Two papers that I love are two review papers, one on evolutionary rescue [@carlson2014evolutionary] and one on genetic rescue [@whiteley2015genetic]. I read these papers in my first few weeks of graduate school, and I still go back to them today when I need a precise definition or good example of either process!
 
 
 ## The mathematics behind my research
@@ -45,7 +47,7 @@ In my work with *Tribolium*, I measure growth rate using $\lambda$, where:
 
 $$ \lambda = \frac{N_{t+1}}{N_t}$$
 
-Brett Melbourne at CU Boulder created a model of the *T. castaneum* system using a modified, stochastic Ricker model @melbourne2008extinction. A simple Ricker model is below:
+Brett Melbourne at CU Boulder created a model for population dynamics of the *Tribolium* system using a modified, stochastic Ricker model [@melbourne2008extinction]. A simple Ricker model is below:
 
 $$ N_{t+1} = N_te^{r(1-\frac{N_t}{k})} $$
 
@@ -115,17 +117,14 @@ pcangsd -beagle colias-full-down4.0x.minInd90.05maf.baq.HiSeq_filt.beagle.gz -ou
 ## What I hope to get out of this class
 
 * Better understand the bioinformatics behind the genomic analyses I am currently working on
-* 
-* Another
+* Continue my analysis of genomic data to include analyses of allele frequencies corresponding with different phenotypes, as well as evidence of admixture between populations
+* Get more comfortable at using programming languages outside of R including bash and python
 
 # Evaluating some R code
 
-Here, please evaluate some R code to make a plot or a figure.
-The goal here is just to realize that you can imbed R code
-within fenced code blocks and get the output rendered into
-the document.
+Here is the PCA that I showed code for above:
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
 library(tidyverse)
 
 setwd("/Users/lilydurkee/OneDrive - Colostate/Grad School/R-Projects-Grad/Colias")
