@@ -1,0 +1,192 @@
+---
+title: "About Me"
+author: "Lily Durkee"
+output:
+  html_document:
+    toc: yes
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+bibliography: references.bib
+---
+
+# Who I am and where I came from
+
+First off, replace "Insert Name Here" in the YAML header with your name.
+It has to be surrounded by double quotation marks. 
+Briefly tell us a little background about yourself, and how
+you ended up becoming a student at CSU and taking this class.
+Put in a hypertext link to your undergraduate institution.  
+
+My top four leisure (or not so leisurely) activities are:
+
+1. Whitewater kayaking
+2. Enjoying good food & beer with friends
+3. Skiing
+4. Mountain biking
+
+
+![Alt text](/Users/lilydurkee/Desktop/Field-Lily.jpeg)
+
+
+# Research Interests
+
+I study evolutionary ecology in insect systems. I have done work in experimental evolution using  *Tribolium castaneum* (red flour beetle) as a model system to study the effects of immigration and admixture on adaptation to novel environments. 
+
+## Influential papers
+
+Two papers that I love are two review papers, one on evolutionary rescue @carlson2014evolutionary and one on genetic rescue @whiteley2015genetic. I read these papers in my first few weeks of graduate school, and I still go back to them today when I need a precise definition or good example of either process!
+
+
+## The mathematics behind my research
+
+In my work with *Tribolium*, I measure growth rate using $\lambda$, where:
+
+$$ \lambda = \frac{N_{t+1}}{N_t}$$
+
+Brett Melbourne at CU Boulder created a model of the *T. castaneum* system using a modified, stochastic Ricker model @melbourne2008extinction. A simple Ricker model is below:
+
+$$ N_{t+1} = N_te^{r(1-\frac{N_t}{k})} $$
+
+## My computing experience
+
+I have used R extensively for all of my data analysis in graduate school. Recently, I have also started using `bash` to work with genomic data on the alpine cluster.  Here is an example of code I used recently to make a PCA. You can see the graph in the following section.
+
+```
+cov<-as.matrix(read.table("colias-full-down4.0x.cov"))
+names<-read_delim("colias-full-down4.0x-bam-list.ind", delim = " ", col_names=F)
+
+#eigenvalues
+e<-eigen(cov)
+
+#make dataframe
+e.df <- as.data.frame(e$vectors)
+e.df$ID <- names$X1
+
+e.df$name <- substr(e.df$ID, 1, 2)
+
+e.df <- e.df %>% dplyr::select(c(V1, V2, ID, name))
+
+#upload all info about sites
+sites <- read.csv("sites-all1.csv")
+
+pca_4.0x <- merge(e.df, sites, by="name", all=T)
+pca_4.0x.data <- merge(pca_4.0x, all.depth, by="ID")
+pca_4.0x.data$cov <- ifelse(pca_4.0x.data$coverage>4, 4, pca_4.0x.data$coverage)
+
+pca_4.0x.data$category1 <- ifelse(pca_4.0x.data$name=="Eu", "C. eurytheme", 
+                            ifelse(pca_4.0x.data$name=="AL", "C. alexandra", pca_4.0x.data$elevation))
+
+pca_4.0x.data$pair <- ifelse(pca_4.0x.data$name=="WY", "WY", 
+                       ifelse(pca_4.0x.data$name=="SC", "E2", pca_4.0x.data$pair))
+
+
+#simple PCA
+plot(e$vectors[,1:2], xlim=c(-.1, .1))
+
+#with ggplot
+#library(ggplot2)
+plot4.0x <- ggplot(data=filter(pca_4.0x.data, name != "AL" & name != "Eu"), aes(x = V1, y = V2, 
+                           shape=category1, 
+                           color=pair)) +
+  geom_point(size=2)+
+  labs(x="PC1", y="PC2") 
+  
+plot4.0x
+```
+
+Here is the bash script that I used to generate the `.cov` file above:
+
+```
+set -x
+
+source ~/.bashrc
+conda activate pcangsd
+
+module load jdk
+module load python
+
+##Traditionally use pcangsd with beagle.gz files
+pcangsd -beagle colias-full-down4.0x.minInd90.05maf.baq.HiSeq_filt.beagle.gz -out colias-full-down4.0x -threads 4
+
+```
+
+## What I hope to get out of this class
+
+* Better understand the bioinformatics behind the genomic analyses I am currently working on
+* 
+* Another
+
+# Evaluating some R code
+
+Here, please evaluate some R code to make a plot or a figure.
+The goal here is just to realize that you can imbed R code
+within fenced code blocks and get the output rendered into
+the document.
+
+```{r, echo=FALSE}
+library(tidyverse)
+
+setwd("/Users/lilydurkee/OneDrive - Colostate/Grad School/R-Projects-Grad/Colias")
+
+# individual sample depths
+all.depth <- read_delim("covSummary.bedtools.txt", delim = " ")
+colnames(all.depth) <- c("full_ID", "ID", "site", "coverage")
+
+all.depth$ID <- str_extract(all.depth$full_ID, "(?<=/).*?(?=_)")
+
+lane <- str_match(all.depth$full_ID, "_(.*?)_(.*?)")
+all.depth$lane <- lane[,2]
+
+all.depth$site <- substr(all.depth$ID, 1, 2)
+
+all.depth$bam <- sub(".*/([^_]+_[^_]+_[^_]+)_.*", "\\1", all.depth$full_ID)
+
+# all samples
+all.samples <- read.csv("all_samples.csv")
+
+all.depth <- merge(all.depth, all.samples, by="ID", all=T)
+
+# read in covariance matrix
+cov<-as.matrix(read.table("colias-full-down4.0x.cov"))
+names<-read_delim("colias-full-down4.0x-bam-list.ind", delim = " ", col_names=F)
+
+#eigenvalues
+e<-eigen(cov)
+
+#make dataframe
+e.df <- as.data.frame(e$vectors)
+e.df$ID <- names$X1
+
+e.df$name <- substr(e.df$ID, 1, 2)
+
+e.df <- e.df %>% dplyr::select(c(V1, V2, ID, name))
+
+#upload all info about sites
+sites <- read.csv("sites-all1.csv")
+
+pca_4.0x <- merge(e.df, sites, by="name", all=T)
+pca_4.0x.data <- merge(pca_4.0x, all.depth, by="ID")
+pca_4.0x.data$cov <- ifelse(pca_4.0x.data$coverage>4, 4, pca_4.0x.data$coverage)
+
+pca_4.0x.data$pair <- ifelse(pca_4.0x.data$name=="WY", "WY", 
+                       ifelse(pca_4.0x.data$name=="SC", "E2", pca_4.0x.data$pair))
+
+
+#with ggplot
+#library(ggplot2)
+plot4.0x <- ggplot(data=filter(pca_4.0x.data, name != "AL" & name != "Eu"), aes(x = V1, y = V2, 
+                           shape=elevation, 
+                           color=pair)) +
+  geom_point(size=2)+
+  labs(x="PC1", y="PC2") +
+  xlim(-.005, .025) +
+  ylim(-.05, .06) 
+  
+plot4.0x
+
+```
+
+# References
+
