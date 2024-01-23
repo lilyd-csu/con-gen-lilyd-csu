@@ -2,11 +2,11 @@
 title: "About Me"
 author: "Lily Durkee"
 output:
-  html_document:
+  pdf_document:
     toc: yes
   word_document:
     toc: yes
-  pdf_document:
+  html_document:
     toc: yes
 bibliography: references.bib
 ---
